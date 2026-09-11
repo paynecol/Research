@@ -6,7 +6,7 @@ orbit_data = CSV.read("periodic_orbits.csv", DataFrame)
 # CONSTANTS
 const L1 = 0.836915
 const L2 = 1.155682
-const PERIODS = 5
+const PERIODS = 4
 
 
 # PLOTTING
