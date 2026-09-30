@@ -1,13 +1,13 @@
 using Plots, CSV, DataFrames, DifferentialEquations
 plotlyjs()
 include("CRTBP_dynamics.jl")
-orbit_data = CSV.read("periodic_orbits.csv", DataFrame)
+orbit_data = CSV.read("periodic_orbits_testing.csv", DataFrame)
 
 # CONSTANTS
 const L1 = 0.836915
 const L2 = 1.155682
-const dt = 0.0001
-const PERIODS = 4
+const dt = 0.00001
+const PERIODS = 1
 
 
 # PLOTTING
@@ -74,11 +74,11 @@ for row in eachrow(orbit_data)
     plot!(plt_orbit, states[1, :], states[2, :], states[3, :], label=orbit_name, lw=1.5, color=colors[i])
 
     # Do Jacobian calculations and plot it
-    #calculated_jacobi = [calc_jacobi(j, mu) for j in eachrow(states)] #BUG: states is a matrix, and I need calc_jacobi to take each row and do the calculation on each state vector
+    calculated_jacobi = [calc_jacobi(Vector(j), mu) for j in eachcol(states)] #BUG: states is a matrix, and I need calc_jacobi to take each row and do the calculation on each state vector
     JPL_J = row[Symbol("Jacobi constant (LU2/TU2) ")]
-    #plot!(plt_jacobi,states.t,calculated_jacobi, lw=1.5, color=colors[i]) # How do I get the t time?
+    plot!(plt_jacobi,(0.0:dt:row[Symbol("Period (TU) ")]*PERIODS),calculated_jacobi, lw=1.5, color=colors[i])
     hline!(plt_jacobi, [JPL_J], linestyle=:dash, lw=1, color=:black)
     i = i+1
 end
 
-#display(plot(plt_orbit, plt_jacobi, layout=(1,2),size=(1000,600)))
+display(plot(plt_orbit, plt_jacobi, layout=(1,2),size=(1000,600)))

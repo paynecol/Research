@@ -1,12 +1,12 @@
 using Plots, CSV, DataFrames, DifferentialEquations
 plotlyjs()
 include("CRTBP_dynamics.jl")
-orbit_data = CSV.read("periodic_orbits.csv", DataFrame)
+orbit_data = CSV.read("periodic_orbits_testing.csv", DataFrame)
 
 # CONSTANTS
 const L1 = 0.836915
 const L2 = 1.155682
-const PERIODS = 4
+const PERIODS = 5
 
 
 # PLOTTING
