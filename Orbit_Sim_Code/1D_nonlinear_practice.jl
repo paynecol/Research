@@ -33,7 +33,7 @@ r_ref = range(r0, stop=rf, length=N) # Initial guess: linear interpolation
 v_ref = range(v0, stop=0, length=N)
 x_ref = [r_ref'; v_ref'] # Apostrophe is transpose
 x_star = copy(x_ref)
-a_star = zeros(N-1)
+u_star = zeros(N-1)
 
 for iter in 1:max_iters
      global x_star, u_star, x_ref
