@@ -41,6 +41,7 @@ for iter in 1:max_iters
 
      x = Variable(2, N) # State variable of rx, ry, vx, vy
      u = Variable(N-1) # Control variable of ux and uy
+     nu = Variable(2, N-1)
 
      constraints = Constraint[
      x[:, 1] == [r0; v0], # Start conditions
@@ -76,12 +77,12 @@ for iter in 1:max_iters
           C = [0; (g_bar - dg_dr*r_bar)*dtau]
 
           push!(constraints, x[1,k] >= rf) # Cannot go into ground
-          push!(constraints, x[:, k+1] == A * x[:, k] + B * u[k] + C)
+          push!(constraints, x[:, k+1] == A * x[:, k] + B * u[k] + C + nu[:, k])
           push!(constraints, u_min <= u[k])
           push!(constraints, u[k] <= u_max)
      end
 
-     solve!(minimize(sum(u), constraints), ECOS.Optimizer; silent=true)
+     solve!(minimize(sum(u) + 1e6 * norm(nu, 1), constraints), ECOS.Optimizer; silent=true)
 
      # CHECK CONVERGENCE
      x_star = copy(evaluate(x))
@@ -101,6 +102,7 @@ end
 # PLOTTING
 
 println("Total Thrust: ",sum(u_star))
+
 
 t_x = range(0, stop=(N-1)*dtau, length=N)
 t_u = range(0, stop=(N-2)*dtau, length=N-1)

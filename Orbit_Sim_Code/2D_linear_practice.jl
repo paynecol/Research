@@ -59,7 +59,7 @@ for k in 1:(N-1)
     push!(constraints, norm(u[:, k]) <= u_max)
 end
 
-solve!(minimize(sum([norm(u[:, k]) for k in 1:(N-1)]), constraints), ECOS.Optimizer; silent=true)
+solve!(minimize(sum([norm(u[:, k]) for k in 1:(N-1)]), constraints), ECOS.Optimizer; silent=false)
 
 # PLOTTING
 
